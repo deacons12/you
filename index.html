@@ -1,170 +1,76 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اختبر نفسك - Operating Systems</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Processing — Self Test</title>
 <style>
-:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#64748b;--blue:#2563eb;--green:#15803d;--red:#dc2626;--line:#e2e8f0}
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Tahoma,sans-serif;line-height:1.65}
-header{background:linear-gradient(130deg,#142d5c,#2563eb);color:#fff;padding:26px 16px 22px;text-align:center}
-header h1{margin:0 0 5px;font-size:clamp(22px,5vw,32px)} header p{margin:0;color:#dbeafe}
-.wrap{max-width:900px;margin:20px auto;padding:0 13px 40px}
-.topbar{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 4px 14px #0f172a0a}
-select,button{font:inherit;border-radius:10px;padding:10px 13px;border:1px solid var(--line);background:#fff;color:var(--ink)}
-button{cursor:pointer;font-weight:bold}button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}button.secondary{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.progress{height:8px;background:#e8eef8;border-radius:20px;overflow:hidden;margin-top:9px;flex-basis:100%}.bar{height:100%;width:0;background:#22c55e;transition:width .2s}
-.section{margin:22px 0 10px;font-size:20px;color:#1e3a8a}
-.q{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;margin:11px 0;box-shadow:0 3px 12px #0f172a08}
-.qhead{display:flex;gap:9px;align-items:flex-start}.num{background:#eaf1ff;color:#1d4ed8;border-radius:8px;min-width:31px;height:31px;display:grid;place-items:center;font-weight:bold}
-.question{font-weight:700;direction:ltr;text-align:left;flex:1}
-.answer{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.answer input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;direction:ltr;text-align:left}
-.options{display:grid;gap:8px;margin-top:12px}
-.opt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;direction:ltr;text-align:left}
-.opt:has(input:checked){background:#eff6ff;border-color:#60a5fa}.opt input{margin-top:5px;accent-color:var(--blue)}
-.feedback{display:none;margin-top:11px;padding:10px 12px;border-radius:10px;font-weight:bold}
-.feedback.correct{display:block;background:#dcfce7;color:#166534}.feedback.wrong{display:block;background:#fee2e2;color:#991b1b}
-.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:24px 0}
-.result{display:none;background:#fff;border:2px solid #93c5fd;border-radius:16px;padding:20px;text-align:center;margin:20px 0}
-.result strong{font-size:32px;color:#1d4ed8}.hint{color:var(--muted);font-size:13px}
-footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
-@media(min-width:650px){.answer input{max-width:460px}.options{grid-template-columns:1fr 1fr}}
-</style>
-</head>
+:root{--main:#246b68;--light:#eaf5f3;--ink:#203332;--muted:#647572;--good:#16834a;--bad:#c33d3d}
+*{box-sizing:border-box}body{margin:0;background:#f4f7f7;color:var(--ink);font-family:Arial,Tahoma,sans-serif}
+header{background:linear-gradient(120deg,#174d4b,#318b83);color:white;padding:30px 18px;text-align:center}
+header h1{margin:0 0 8px;font-size:27px}header p{margin:0;opacity:.9}
+.wrap{max-width:950px;margin:24px auto;padding:0 14px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;background:white;padding:14px;border-radius:14px;box-shadow:0 3px 14px #163b3510;margin-bottom:18px}
+select,button{font:inherit;border-radius:9px;padding:11px 14px;border:1px solid #d4e0de;background:white;color:var(--ink)}
+button{cursor:pointer;font-weight:700}.primary{background:var(--main);color:white;border-color:var(--main)}.secondary{background:var(--light);border-color:#c7e2dd}
+#progress{font-size:14px;color:var(--muted)}.question{background:white;border-radius:14px;padding:18px;margin:13px 0;box-shadow:0 3px 14px #163b350b;border:1px solid #e7eeee}
+.qhead{display:flex;gap:10px;align-items:flex-start}.num{background:var(--light);color:var(--main);font-weight:bold;border-radius:8px;padding:5px 9px}.qtext{font-weight:700;line-height:1.55;margin:2px 0 13px}
+.option{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid #e5eceb;border-radius:9px;margin:7px 0;cursor:pointer;line-height:1.4}.option:hover{background:#f7fbfa}.option input{margin-top:3px;accent-color:var(--main)}
+.correct{border-color:#8bd0a8;background:#effaf3}.wrong{border-color:#e6a0a0;background:#fff2f2}.result{margin-top:12px;padding:11px;border-radius:9px;font-size:14px;line-height:1.5}.result.good{background:#e8f7ee;color:#12683a}.result.bad{background:#fff0f0;color:#9e2929}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:24px 0}.summary{display:none;background:white;padding:22px;border-radius:15px;text-align:center;box-shadow:0 3px 16px #163b3512}.score{font-size:34px;font-weight:800;color:var(--main);margin:8px}.note{font-size:13px;color:var(--muted);line-height:1.5}
+@media(max-width:600px){header h1{font-size:22px}.toolbar{align-items:stretch}.toolbar>*{width:100%}.question{padding:14px}}
+</style></head>
 <body>
-<header><h1>اختبر نفسك – Operating Systems</h1><p>Chapter 1 + Chapter 3 | جاوب وبعدين اضغط Submit للتصحيح</p></header>
-<main class="wrap">
-<div class="topbar">
- <label>عرض الأسئلة:
-  <select id="filter" onchange="filterQuestions()">
-   <option value="all">كل الأسئلة</option><option value="ch1">Chapter 1 – Fill in the blanks</option>
-   <option value="ch3fill">Chapter 3 – Fill in the blanks</option><option value="mcq">Chapter 3 – MCQ</option>
-  </select>
- </label>
- <span id="count">عدد الأسئلة: 47</span>
- <div class="progress"><div class="bar" id="bar"></div></div>
- <span class="hint" id="progressText">تمت الإجابة عن 0 سؤال</span>
+<header><h1>Image Processing — Self Test</h1><p>اختبر نفسك في الشيتات الأربعة وصحّح إجاباتك تلقائيًا</p></header>
+<div class="wrap">
+<div class="toolbar">
+<select id="section"><option value="all">All sheets — كل الأسئلة</option></select>
+<div id="progress">0 answered</div><button class="secondary" id="resetTop">Reset answers</button>
 </div>
 <div id="quiz"></div>
-<div class="result" id="result"><div>نتيجتك</div><strong id="score">0 / 0</strong><p id="percent"></p><p id="summary"></p></div>
-<div class="actions">
- <button class="primary" onclick="submitQuiz()">Submit – صحح إجاباتي</button>
- <button class="secondary" onclick="resetQuiz()">إعادة الاختبار</button>
+<div class="actions"><button class="primary" id="submit">Submit &amp; Correct</button><button class="secondary" id="reset">Try Again</button></div>
+<div class="summary" id="summary"></div>
+<p class="note">ملاحظة: السؤالان 29 و30 في Sheet 3 يعتمدان على شكل H(u,v) غير ظاهر في ملف PDF المرفوع، لذلك لم تتم إضافتهما حتى لا يتم تخمين الإجابة. تمت إضافة الأسئلة النصية الواضحة فقط.</p>
 </div>
-<footer>التصحيح يظهر بعد الضغط على Submit. اكتب إجابات الـ Fill in the blanks بالإنجليزي.</footer>
-</main>
 <script>
-const fill1 = [
-["The invention of the ______ was the hardware revolution that brought about desktop and handheld computing.","microprocessor"],
-["The classic microprocessor is giving way to the ______, where CPUs, caches and other components are on the same chip.","system on a chip (soc)","system on a chip","soc"],
-["The processing required for a single instruction is called an ______ cycle.","instruction"],
-["The fetched instruction is loaded into the ______.","instruction register (ir)","instruction register","ir"],
-["The I/O module sends an ______ signal to the processor when the device is ready.","interrupt"],
-["The device that stages movement of data between main memory and processor registers is ______.","cache memory"],
-["External, nonvolatile memory is also called ______ or auxiliary memory.","secondary memory"],
-["The ______ determines which cache location a new block will occupy.","mapping function"],
-["In a ______ multiprocessor, all processors can perform the same functions.","symmetric multiprocessing (smp)","symmetric multiprocessing","smp"],
-["A computer combining two or more processors on one piece of silicon is a ______ computer.","multicore"],
-["The register containing the address of the next instruction to be fetched is the ______.","program counter (pc)","program counter","pc"],
-["Each main-memory location contains a ______ value interpreted as instruction or data.","binary"],
-["The address register required for user-visible stack addressing is the ______.","stack pointer (sp)","stack pointer","sp"],
-["Registers used by system programs to minimize main-memory references are ______ registers.","general-purpose","general purpose"],
-["Multiple programs taking turns in execution is called ______.","multiprogramming"]
-];
-const fill3 = [
-["A process is in the ______ state when it is in secondary memory and awaiting an event.","blocked/suspend","blocked suspend","blocked/suspended"],
-["Two essential elements of a process are ______ and a set of data associated with that code.","program code"],
-["The ______ tables provide information about the existence and location of files and their attributes.","file"],
-["The ______ contains sufficient information to interrupt a running process and later resume it.","process control block (pcb)","process control block","pcb"],
-["Creating a process at the explicit request of another process is called ______.","process spawning","spawning"],
-["Giving each process in the queue a certain amount of time in turn is ______ scheduling.","round-robin","round robin"],
-["A process in main memory and available for execution is in the ______ state.","ready"],
-["______ tables track both main (real) and secondary (virtual) memory.","memory"],
-["PCB information categories include process identification, ______, and process control information.","processor state information"],
-["The maximum time a process can execute before being interrupted is a ______.","time slice"],
-["The principal function of the OS is to create, manage, and ______ processes.","schedule"],
-["The principal function of the OS is to create, manage, and ______ processes.","control"],
-["The portion of the OS that selects the next process to run is the ______.","dispatcher"],
-["The collection of program, data, stack, and attributes is the ______.","process image"],
-["A process in main memory and awaiting an event is in the ______ state.","blocked"],
-["The sequence of instructions that executes for an individual process is called a ______.","trace"],
-["An error or exception condition generated within the currently running process is a ______.","trap"]
-];
-const mcqs = [
-["Which is NOT an essential element of a process?",["Program code","CPU registers","Stack","Hard disk"],3],
-["In a five-state model, a process in Blocked state is:",["Ready for execution","Waiting for an event to occur","Being executed","Terminated"],1],
-["What is the main role of the PCB?",["Stores process attributes and manages execution","Controls file system operations","Schedules the CPU for different processes","Handles memory management only"],0],
-["A process in the Suspended state:",["Cannot be resumed","Is waiting in the ready queue","Has been moved to secondary storage","Is executing in kernel mode"],2],
-["Which is NOT a reason for process termination?",["Normal completion","Timeout","Process enters an infinite loop","Memory limit exceeded"],2],
-["A process suspended by an agent to prevent execution is a ______ process.",["Blocked","Suspended","Ready","Swapped"],1],
-["The principal responsibility to control process execution belongs to the:",["OS","Process control block","Memory","Dispatcher"],0],
-["When one process spawns another, the spawned process is the:",["Trap process","Child process","Stack process","Parent process"],1],
-["A process in main memory and awaiting an event is in the:",["Blocked","Blocked/Suspend","Ready/Suspend","Ready"],0],
-["The portion of the OS that selects the next process to run is the:",["Trace","Process control block","Dispatcher","PSW"],2],
-["When a computer system boots and starts a user application after an interrupt occurs, which operating modes are involved?",["User mode → System mode","System mode → User mode","User mode only","System mode only"],1],
-["The sequence of instructions that executes for an individual process is called:",["Process image","Trace","Dispatcher","Program counter"],1],
-["When one process spawns another, the spawned process is called:",["Parent process","Trap process","Child process","Stack process"],2],
-["Which system gives higher CPU utilization when jobs require both I/O and CPU time?",["Single-programming system","Multiprogramming system","Batch-only system","Time-sharing disabled"],1],
-["Managing system resources among multiple students to ensure fairness is which principle?",["Process scheduling","Memory management","Interrupt handling","Resource allocation"],3]
-];
-const sections = [
- {id:"ch1",title:"Chapter 1 – Fill in the blanks",type:"fill",items:fill1},
- {id:"ch3fill",title:"Chapter 3 – Fill in the blanks",type:"fill",items:fill3},
- {id:"mcq",title:"Chapter 3 – Choose the correct answer (MCQ)",type:"mcq",items:mcqs}
-];
-const quiz=document.getElementById("quiz");
-function norm(s){return (s||"").toLowerCase().trim().replace(/[().,]/g,"").replace(/\s+/g," ")}
-function render(){
- quiz.innerHTML="";let n=0;const f=document.getElementById("filter").value;
- sections.filter(s=>f==="all"||s.id===f).forEach(sec=>{
-  const h=document.createElement("h2");h.className="section";h.textContent=sec.title;quiz.appendChild(h);
-  sec.items.forEach((item,i)=>{n++;const card=document.createElement("section");card.className="q";card.dataset.section=sec.id;card.dataset.index=i;
-   const head=document.createElement("div");head.className="qhead";head.innerHTML=`<span class="num">${i+1}</span><div class="question">${item[0]}</div>`;card.appendChild(head);
-   if(sec.type==="fill"){
-    const box=document.createElement("div");box.className="answer";box.innerHTML=`<input type="text" autocomplete="off" placeholder="اكتب إجابتك هنا..." aria-label="إجابتك">`;card.appendChild(box);
-   }else{
-    const opts=document.createElement("div");opts.className="options";
-    item[1].forEach((op,j)=>{const lab=document.createElement("label");lab.className="opt";lab.innerHTML=`<input type="radio" name="${sec.id}_${i}" value="${j}"><span>${String.fromCharCode(65+j)}) ${op}</span>`;opts.appendChild(lab)});card.appendChild(opts);
-   }
-   const fb=document.createElement("div");fb.className="feedback";card.appendChild(fb);quiz.appendChild(card);
-  });
+const BANK = [{"title":"Sheet 1 — Fundamentals & Histograms","questions":[{"q":"A digital image is represented as:","opts":["Continuous function f(x,y)","Discrete samples f[x,y]","A histogram of values","A 1D signal"],"ans":1},{"q":"Each element of a digital image array is called:","opts":["Pixel","Voxel","Bit","Intensity"],"ans":0},{"q":"Pixel values in grayscale images typically range from:","opts":["0–100","0–1","0–255","–255–255"],"ans":2},{"q":"Which of the following is an example of a colour image model?","opts":["HSV","RGB","CMY","All of the above"],"ans":3},{"q":"Low contrast in images is often caused by:","opts":["High brightness","Poor lighting or sensor nonlinearity","Too many pixels","Histogram equalization"],"ans":1},{"q":"Contrast stretching is used to:","opts":["Blur the image","Expand the dynamic range of intensity levels","Reduce image size","Convert image to binary"],"ans":1},{"q":"The histogram of an image represents:","opts":["Frequency of pixel intensity values","Average brightness","Number of colours","Image resolution"],"ans":0},{"q":"Two different images may have:","opts":["The same histogram","Different histograms always","No histogram","Same resolution only"],"ans":0},{"q":"Histogram equalization is applied to:","opts":["Reduce brightness","Improve contrast by spreading pixel values","Shrink image size","Convert RGB to grayscale"],"ans":1},{"q":"Contrast-limited adaptive histogram equalization (CLAHE) is mainly used to:","opts":["Clip histogram values in flat regions","Reduce image noise","Increase image size","Blur sharp edges"],"ans":0},{"q":"Histogram stretching increases contrast by:","opts":["Compressing pixel values","Expanding pixel values across full range","Sliding histogram left","Reducing gray levels"],"ans":1},{"q":"Histogram shrinking is useful in:","opts":["Image enhancement","Image sharpening (unsharp masking)","Contrast equalization","Brightness reduction"],"ans":1},{"q":"Histogram sliding modifies:","opts":["Brightness","Contrast","Resolution","Frequency spectrum"],"ans":0},{"q":"A positive offset in histogram sliding makes the image:","opts":["Darker","Brighter","More blurry","Sharper"],"ans":1},{"q":"Brightness refers to:","opts":["The sharpness of edges","The energy output of a light source relative to another","The histogram width","Pixel density"],"ans":1},{"q":"A digital image processing system performs:","opts":["Filtering only","Transformation operations","Noise addition","Histogram plotting only"],"ans":1},{"q":"The general form of image transformation is:","opts":["g(x,y) = T(f(x,y))","g(x,y) = f(x,y) + noise","g(x,y) = f(x,y) – T","g(x,y) = constant"],"ans":0},{"q":"In the transformation equation s = T(r):","opts":["r is the output pixel value","s is the input pixel value","r is input and s is output","Both r and s are input values"],"ans":2},{"q":"In negative transformation:","opts":["s = r","s = (L – 1) – r","s = r – 1","s = (L + 1) – r"],"ans":1},{"q":"Which of the following is NOT a purpose of histogram modification?","opts":["Stretching","Shrinking","Sliding","Image compression"],"ans":3}]},{"title":"Sheet 2 — Segmentation & Edge Detection","questions":[{"q":"Image segmentation is the process of:","opts":["Converting color to grayscale","Partitioning an image into regions","Filtering noise from an image","Enhancing image brightness"],"ans":1},{"q":"In image segmentation, the subsets (R(i)) must be:","opts":["Overlapping","Disjoint and cover the entire image","Randomly selected","Based on color only"],"ans":1},{"q":"The main drawback of histogram-based region detection is:","opts":["Complexity","Lack of spatial information","Requires grayscale input","Expensive computation"],"ans":1},{"q":"Region-growing methods are based on:","opts":["Frequency domain analysis","Proximity and similarity of pixels","Thresholding only","Random segmentation"],"ans":1},{"q":"The first step in region growing is:","opts":["Apply edge detector","Choose seed pixels","Merge regions","Compute gradient"],"ans":1},{"q":"Bi-level thresholding is suitable for images with:","opts":["Unimodal histograms","Trimodal histograms","Bimodal histograms","Uniform distribution"],"ans":2},{"q":"In split-and-merge segmentation, the process is represented by a:","opts":["Binary tree","Decision tree","Quadtree","Gradient map"],"ans":2},{"q":"Edges correspond to:","opts":["Smooth intensity regions","Constant color areas","Abrupt changes in intensity","Random noise"],"ans":2},{"q":"Edge detection helps in:","opts":["Object recognition","Image compression","Histogram equalization","Noise reduction"],"ans":0},{"q":"The gradient of an image points in the direction of:","opts":["Minimum intensity change","Constant intensity","Maximum intensity increase","Random direction"],"ans":2},{"q":"The edge strength is given by:","opts":["Gradient direction","Gradient magnitude","Average intensity","Variance of pixels"],"ans":1},{"q":"Roberts operator is based on:","opts":["3×3 masks","2×2 masks","5×5 masks","Gaussian filters"],"ans":1},{"q":"Sobel operator performs:","opts":["Only smoothing","Differencing and smoothing","Thresholding","Region merging"],"ans":1},{"q":"Prewitt operator is similar to Sobel but:","opts":["Uses simpler weights","Uses larger masks","Detects only vertical edges","Works in the frequency domain"],"ans":0},{"q":"Canny edge detector is:","opts":["A single-stage process","A multi-stage edge detection algorithm","Based on color segmentation","Only for binary images"],"ans":1},{"q":"The first step in the Canny edge detector is:","opts":["Hysteresis thresholding","Gradient computation","Convert to grayscale","Non-maximum suppression"],"ans":2},{"q":"Laplacian operator is:","opts":["First-order derivative","Second-order derivative","Third-order derivative","Nonlinear filter"],"ans":1},{"q":"The Laplacian operator is very sensitive to:","opts":["Color variations","Noise","Illumination","Contrast"],"ans":1},{"q":"The Laplacian of Gaussian (LoG) combines:","opts":["Thresholding and region growing","Smoothing and edge detection","Histogram equalization and filtering","Gradient and region merging"],"ans":1},{"q":"The LoG operator is also known as:","opts":["Sobel operator","Marr–Hildreth operator","Prewitt operator","Roberts operator"],"ans":1},{"q":"The DoG (Difference of Gaussian) is used to:","opts":["Approximate the Laplacian of Gaussian","Detect color differences","Perform histogram equalization","Smooth only horizontal edges"],"ans":0},{"q":"The advantage of DoG over LoG is:","opts":["Higher accuracy","Less computation","Better corner detection","Smoother output"],"ans":1},{"q":"The gradient method works best when:","opts":["The image contains sharp transitions and low noise","The image is uniform","The edges are fuzzy","The contrast is low"],"ans":0},{"q":"Zero-crossings of LoG offer:","opts":["Poor localization","Better edge localization","No improvement","Lower accuracy"],"ans":1},{"q":"Quadtree segmentation divides an image into:","opts":["Two parts","Four parts recursively","Eight parts","Random regions"],"ans":1}]},{"title":"Sheet 3 — Image Enhancement & Filtering","questions":[{"q":"Image enhancement mainly aims to:","opts":["Compress images","Improve visual appearance or highlight features","Segment objects automatically","Reduce file size"],"ans":1},{"q":"Spatial domain operations work directly on:","opts":["Frequency components","Pixel values","Fourier coefficients","Phase spectrum"],"ans":1},{"q":"Frequency domain operations work on:","opts":["Pixel brightness only","Image histogram","Frequency components after a Fourier Transform","Color channels"],"ans":2},{"q":"Low-pass filters are mainly used for:","opts":["Sharpening images","Removing low frequencies","Noise reduction and smoothing","Edge detection"],"ans":2},{"q":"A high-pass filter removes:","opts":["High-frequency components","Low-frequency components","Medium-frequency components","Noise only"],"ans":1},{"q":"Which of the following is a low-pass filter in the spatial domain?","opts":["Laplacian filter","Sobel filter","Gaussian filter","Prewitt filter"],"ans":2},{"q":"The Laplacian filter is commonly used for:","opts":["Blurring images","Smoothing noise","Edge detection and sharpening","Color balancing"],"ans":2},{"q":"Directional smoothing reduces noise while:","opts":["Ignoring all edges","Blurring all regions equally","Preserving structures along a chosen direction","Enhancing all edges"],"ans":2},{"q":"Median filtering is particularly effective against:","opts":["Gaussian noise","Impulse (salt-and-pepper) noise","Speckle noise","Poisson noise"],"ans":1},{"q":"In median filtering, the output pixel is:","opts":["The average of neighborhood pixels","The minimum value in the neighborhood","The maximum value in the neighborhood","The median of neighborhood pixels"],"ans":3},{"q":"Sharpening filters are based on:","opts":["Spatial integration","Spatial differentiation","Fourier addition","Thresholding"],"ans":1},{"q":"The frequency domain representation of an image is obtained using:","opts":["Convolution","Fourier Transform","Histogram equalization","Edge detection"],"ans":1},{"q":"Low frequencies in an image correspond to:","opts":["Edges and fine details","Rapid intensity changes","Smooth and slowly varying regions","Random noise"],"ans":2},{"q":"The Butterworth filter is known for:","opts":["Sharp cutoff between bands","Smooth transition from passband to stopband","High computational complexity","Spatial domain operation only"],"ans":1},{"q":"The order ‘n’ of a Butterworth filter affects:","opts":["Image brightness","Sharpness of transition between pass and stop bands","Image resolution","Edge direction"],"ans":1},{"q":"The cutoff frequency (D₀) in a low-pass filter defines:","opts":["The maximum intensity value","The frequency where the filter response is half of its maximum","The image size","The color balance"],"ans":1},{"q":"Homomorphic filtering separates:","opts":["Noise and signal components","Illumination and reflectance","Red and blue channels","Background and foreground"],"ans":1},{"q":"The first step in homomorphic filtering is:","opts":["Apply inverse Fourier Transform","Apply logarithmic transformation","Multiply by high-pass filter","Histogram equalization"],"ans":1},{"q":"The goal of homomorphic filtering is to:","opts":["Remove motion blur","Correct uneven lighting and enhance contrast","Perform segmentation","Detect edges"],"ans":1},{"q":"Unsharp masking enhances images by:","opts":["Subtracting a blurred version from the original","Adding Gaussian noise","Averaging pixel intensities","Reducing brightness"],"ans":0},{"q":"According to the convolution theorem, convolution in the spatial domain corresponds to:","opts":["Division in frequency domain","Multiplication in frequency domain","Addition in frequency domain","Subtraction in frequency domain"],"ans":1},{"q":"Gaussian noise has:","opts":["Fixed intensity value","Random occurrences of black and white pixels","Intensity variations following a normal distribution","Constant mean value"],"ans":2},{"q":"Speckle noise commonly occurs in:","opts":["Digital photography","Radar and ultrasound imaging","Scanned documents","Video compression"],"ans":1},{"q":"To reduce high-frequency noise, one should use:","opts":["High-pass filter","Band-pass filter","Low-pass filter","Laplacian filter"],"ans":2},{"q":"In noise reduction via frequency domain:","opts":["Apply high-pass filter first","Apply low-pass filter after Fourier Transform","Use median filter in frequency domain","Apply histogram equalization"],"ans":1},{"q":"For an ideal high-pass filter, what are the output values when D(u,v) ≤ D₀ and D(u,v) > D₀, respectively?","opts":["0 and 1","1 and 0","1 in both cases","0 in both cases"],"ans":0},{"q":"High frequencies in an image represent:","opts":["Edges","Noise","Both edges and noise","Neither edges nor noise"],"ans":2},{"q":"Image processing approaches operating directly on input-image pixels work in the:","opts":["Transform domain","Spatial domain","Inverse transformation domain","None of these"],"ans":1},{"q":"The mask shown is a 3×3 matrix of all ones, each weighted by 1/9. It belongs to which filter type?","opts":["Sharpening spatial filter","Median filter","Smoothing spatial filter","Sharpening frequency filter"],"ans":2}]},{"title":"Sheet 4 — Image Classification & Hyperspectral Band Selection","questions":[{"q":"What is the main goal of image classification?","opts":["Detecting objects in an image","Assigning a label to an entire image","Segmenting each pixel","Enhancing image resolution"],"ans":1},{"q":"Which of the following is commonly used for image classification tasks?","opts":["Recurrent Neural Networks (RNN)","Convolutional Neural Networks (CNN)","Decision Trees","Reinforcement Learning"],"ans":1},{"q":"In CNNs, convolutional layers mainly help with:","opts":["Reducing dimensionality","Extracting spatial features","Increasing model complexity","Normalizing data"],"ans":1},{"q":"Which operation follows convolution in most CNN architectures?","opts":["Pooling","Normalization","Dropout","Activation"],"ans":3},{"q":"The ReLU activation function is used because it:","opts":["Is non-linear and reduces vanishing gradient","Is linear and simple","Works only for classification","Increases overfitting"],"ans":0},{"q":"What does the pooling layer do?","opts":["Increases the number of parameters","Increases spatial dimensions","Reduces feature map size","Applies a convolution"],"ans":2},{"q":"What does soft-max activation in the output layer provide?","opts":["Binary outputs","Class probabilities","Gradient updates","Normalization of inputs"],"ans":1},{"q":"Which metric is not suitable for evaluating imbalanced image classification datasets?","opts":["Accuracy","Precision","Recall","F1-score"],"ans":0},{"q":"Transfer learning in image classification means:","opts":["Training a model from scratch","Using a pre-trained model and fine-tuning it","Sharing data between models","Using multiple models together"],"ans":1},{"q":"Dropout in CNNs is used to:","opts":["Increase model capacity","Reduce overfitting","Improve feature extraction","Normalize input data"],"ans":1},{"q":"What type of layer is typically used at the end of a CNN for classification?","opts":["Convolutional layer","Pooling layer","Fully connected (dense) layer","Dropout layer"],"ans":2},{"q":"What is the main goal of hyperspectral band selection algorithms?","opts":["To increase the number of spectral bands","To reduce dimensionality while keeping relevant information","To add artificial noise to test the model","To merge all bands into a single grayscale image"],"ans":1},{"q":"The first step in selecting useful hyperspectral bands is to:","opts":["Apply PCA directly","Understand the specific application and target features","Randomly remove redundant bands","Use all available wavelengths"],"ans":1},{"q":"Why is redundancy reduction important in hyperspectral data?","opts":["To remove spatial information","To minimize computation and avoid overfitting","To make the image more colorful","To enhance atmospheric noise"],"ans":1},{"q":"What kind of bands should ideally be selected?","opts":["Bands affected by noise","Bands least affected by atmospheric distortions","Bands that are highly correlated","Bands outside the sensor range"],"ans":1},{"q":"Why is validation with ground truth data important in band selection?","opts":["It helps confirm that chosen bands improve accuracy","It removes the need for further processing","It increases the number of features","It only helps with image visualization"],"ans":0}]}];
+const section=document.getElementById('section'), quiz=document.getElementById('quiz'), progress=document.getElementById('progress'), summary=document.getElementById('summary');
+BANK.forEach((s,i)=>{let o=document.createElement('option');o.value=i;o.textContent=s.title;section.appendChild(o)});
+let current=[];
+function load(){
+ quiz.innerHTML='';summary.style.display='none';summary.innerHTML='';
+ current=[];
+ const chosen=section.value==='all'?BANK:[BANK[Number(section.value)]];
+ let global=0;
+ chosen.forEach((s,si)=>{let h=document.createElement('h2');h.textContent=s.title;h.style.cssText='font-size:19px;margin:25px 4px 10px';quiz.appendChild(h);
+ s.questions.forEach((item)=>{global++;let id='q'+global;current.push(item);
+ let card=document.createElement('section');card.className='question';card.dataset.id=id;
+ let head=document.createElement('div');head.className='qhead';
+ let n=document.createElement('span');n.className='num';n.textContent=global;
+ let q=document.createElement('div');q.className='qtext';q.textContent=item.q;head.append(n,q);card.appendChild(head);
+ item.opts.forEach((opt,j)=>{let label=document.createElement('label');label.className='option';let input=document.createElement('input');input.type='radio';input.name=id;input.value=j;
+ let span=document.createElement('span');span.textContent=String.fromCharCode(65+j)+') '+opt;label.append(input,span);card.appendChild(label)});
+ quiz.appendChild(card);
+ });});
+ updateProgress();
+}
+function updateProgress(){let count=0;document.querySelectorAll('.question').forEach(c=>{if(c.querySelector('input:checked'))count++});progress.textContent=count+' / '+current.length+' answered'}
+quiz.addEventListener('change',updateProgress);
+function correct(){
+ let score=0,answered=0;
+ document.querySelectorAll('.question').forEach((card,i)=>{let item=current[i],chosen=card.querySelector('input:checked'),answer=item.ans;card.querySelectorAll('.option').forEach((lab,j)=>{lab.classList.remove('correct','wrong');if(j===answer)lab.classList.add('correct');if(chosen&&j===Number(chosen.value)&&j!==answer)lab.classList.add('wrong')});
+ let old=card.querySelector('.result');if(old)old.remove();
+ let box=document.createElement('div');box.className='result '+(chosen&&Number(chosen.value)===answer?'good':'bad');
+ if(chosen){answered++;if(Number(chosen.value)===answer){score++;box.textContent='✓ Correct — '+String.fromCharCode(65+answer)+') '+item.opts[answer]}else{box.textContent='✗ Incorrect — Correct answer: '+String.fromCharCode(65+answer)+') '+item.opts[answer]}}
+ else{box.textContent='Not answered — Correct answer: '+String.fromCharCode(65+answer)+') '+item.opts[answer]}
+ card.appendChild(box);
+ card.querySelectorAll('input').forEach(x=>x.disabled=true);
  });
- document.getElementById("count").textContent="عدد الأسئلة: "+n;document.getElementById("result").style.display="none";updateProgress();
+ summary.style.display='block';summary.innerHTML='<div>نتيجتك</div><div class="score">'+score+' / '+current.length+'</div><div>Correct: '+score+' &nbsp; | &nbsp; Wrong / Unanswered: '+(current.length-score)+'</div><p>'+Math.round(score/current.length*100)+'% score</p>';
+ summary.scrollIntoView({behavior:'smooth',block:'center'});
 }
-function filterQuestions(){render()}
-function updateProgress(){
- const cards=[...document.querySelectorAll(".q")];let done=0;
- cards.forEach(c=>{if(c.querySelector("input[type=text]")?.value.trim()||c.querySelector("input[type=radio]:checked"))done++});
- document.getElementById("progressText").textContent=`تمت الإجابة عن ${done} من ${cards.length} سؤال`;
- document.getElementById("bar").style.width=(cards.length?done/cards.length*100:0)+"%";
-}
-document.addEventListener("input",e=>{if(e.target.matches(".q input"))updateProgress()});
-document.addEventListener("change",e=>{if(e.target.matches(".q input"))updateProgress()});
-function submitQuiz(){
- const cards=[...document.querySelectorAll(".q")];let correct=0,answered=0;
- cards.forEach(c=>{
-  const sec=sections.find(s=>s.id===c.dataset.section),i=+c.dataset.index,item=sec.items[i],fb=c.querySelector(".feedback");let ok=false,answer="";
-  if(sec.type==="fill"){
-   const val=c.querySelector("input").value; if(val.trim())answered++;
-   ok=(item.slice(1).some(a=>norm(a)===norm(val)));
-   answer=item[1];
-  }else{
-   const chosen=c.querySelector("input:checked");if(chosen)answered++;
-   ok=!!chosen&&+chosen.value===item[2];answer=String.fromCharCode(65+item[2])+") "+item[1][item[2]];
-  }
-  if(ok)correct++;
-  fb.className="feedback "+(ok?"correct":"wrong");
-  fb.textContent=(ok?"✓ إجابة صحيحة":"✗ إجابة غير صحيحة")+" — الإجابة الصحيحة: "+answer;
- });
- const pct=cards.length?Math.round(correct/cards.length*100):0;
- document.getElementById("score").textContent=`${correct} / ${cards.length}`;
- document.getElementById("percent").textContent=`النسبة: ${pct}%`;
- document.getElementById("summary").textContent=`أجبت عن ${answered} سؤال من ${cards.length}. ${pct>=85?"ممتاز!":pct>=60?"كويس، راجع الأسئلة اللي غلطت فيها.":"راجع الإجابات وحاول مرة تانية."}`;
- document.getElementById("result").style.display="block";
- document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"});
-}
-function resetQuiz(){render();window.scrollTo({top:0,behavior:"smooth"})}
-render();
-</script>
-</body></html>
+function reset(){load();window.scrollTo({top:0,behavior:'smooth'})}
+document.getElementById('submit').addEventListener('click',correct);
+document.getElementById('reset').addEventListener('click',reset);
+document.getElementById('resetTop').addEventListener('click',reset);
+section.addEventListener('change',load);
+load();
+</script></body></html>
