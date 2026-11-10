@@ -1,204 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Computer Architecture — Practice Quiz</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assembly Midterm — اختبار تفاعلي</title>
 <style>
-:root{--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#667085;--accent:#3157d5;--line:#e3e8f2;--good:#16834a;--bad:#c53535}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-header{background:linear-gradient(120deg,#172b67,#3157d5);color:white;padding:30px 18px 26px;text-align:center}
-header h1{margin:0 0 6px;font-size:clamp(23px,4vw,34px)}header p{margin:0;color:#e1e8ff}
-.wrap{max-width:900px;margin:24px auto;padding:0 14px 40px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:14px}
-.progressbox,.scorebox{background:white;border:1px solid var(--line);border-radius:13px;padding:12px 15px;flex:1;min-width:190px}
-.progressline{height:8px;background:#e9edf7;border-radius:9px;overflow:hidden;margin-top:8px}.progressline span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
-.section{margin:24px 0 12px;font-size:18px;color:#263d8b;border-bottom:2px solid #dce4ff;padding-bottom:7px}
-.question{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;margin:12px 0;box-shadow:0 3px 12px #1c31500a}
-.qtop{display:flex;gap:10px;align-items:flex-start}.num{background:#edf1ff;color:#2948b7;font-weight:700;border-radius:8px;padding:3px 9px;white-space:nowrap}
-.qtext{font-weight:650;flex:1}.tag{font-size:12px;color:var(--muted);font-weight:600;margin:7px 0 11px 47px}
-.options{display:grid;gap:8px;margin-left:47px}
-.option{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:.15s}
-.option:hover{border-color:#9baeea;background:#f8f9ff}.option input{margin-top:5px;accent-color:var(--accent);flex-shrink:0}
-.option.selected{border-color:var(--accent);background:#f1f4ff}
-.option.correct{border-color:var(--good);background:#effaf3}.option.wrong{border-color:var(--bad);background:#fff2f2}
-.feedback{display:none;margin:10px 0 0 47px;padding:10px 12px;border-radius:9px;background:#f5f7fb;color:#344054;font-size:14px}
-.feedback.show{display:block}.feedback.good{border-left:4px solid var(--good)}.feedback.bad{border-left:4px solid var(--bad)}
-.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:25px 0}
-button{border:0;border-radius:11px;padding:13px 22px;font-size:16px;font-weight:700;cursor:pointer}
-#submit{background:var(--accent);color:white}#reset{background:#e6eaf3;color:#26334d}
-#submit:hover{background:#2445b9}#reset:hover{background:#d8deeb}
-#result{display:none;background:white;border:1px solid var(--line);border-radius:15px;padding:22px;text-align:center;margin:18px 0}
-#result h2{margin:0 0 6px}#result .big{font-size:36px;font-weight:800;color:var(--accent)}
-.small{color:var(--muted);font-size:14px}.unanswered{outline:2px solid #f2b84b}
-@media(max-width:600px){.question{padding:14px}.options,.tag,.feedback{margin-left:0}.qtop{gap:8px}.toolbar{display:block}.progressbox,.scorebox{margin-bottom:9px}}
-</style>
-</head>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#17233c;--muted:#667085;--blue:#244b8f;--green:#13804a;--red:#c43d43;}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Tahoma,sans-serif;line-height:1.65}
+header{background:linear-gradient(120deg,#142b55,#315fa8);color:white;padding:25px 18px;text-align:center}
+header h1{margin:0 0 6px;font-size:25px} header p{margin:0;color:#e5edff}
+main{max-width:900px;margin:20px auto;padding:0 14px}
+.toolbar{background:#fff;padding:14px;border-radius:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;box-shadow:0 3px 14px #1c31500d;position:sticky;top:6px;z-index:5}
+select,button{font:inherit;border-radius:9px;padding:10px 13px;border:1px solid #d5dbea;background:white;color:var(--ink)}
+button{cursor:pointer;font-weight:bold} .primary{background:var(--blue);color:#fff;border-color:var(--blue)} .soft{background:#edf2fb}
+#progress{margin-right:auto;color:var(--muted);font-size:14px}
+.question{background:var(--card);margin:14px 0;padding:17px;border-radius:14px;box-shadow:0 3px 14px #1c31500b;border:1px solid #e7eaf1}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:8px}
+.badge{background:#edf2fb;color:#244b8f;border-radius:30px;padding:3px 9px} .repeat{background:#fff0c7;color:#815900;font-weight:bold}
+.qtext{font-size:17px;font-weight:700;margin:7px 0 12px;direction:ltr;text-align:left}
+.option{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border:1px solid #e3e7ef;border-radius:9px;margin:7px 0;direction:ltr;text-align:left;cursor:pointer}
+.option:hover{background:#f5f8ff} .option input{margin-top:5px;accent-color:#244b8f}
+.correct{border-color:#61b98a;background:#eaf8f0} .wrong{border-color:#e38a8e;background:#fff0f0}
+.feedback{font-size:14px;margin-top:9px;color:var(--muted)} .feedback.good{color:var(--green)} .feedback.bad{color:var(--red)}
+#result{display:none;background:#fff;border-radius:14px;padding:20px;margin:16px 0;text-align:center;border:2px solid #dce5f5}
+.score{font-size:32px;font-weight:bold;color:var(--blue)} .note{font-size:13px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
+@media(max-width:560px){header h1{font-size:21px} .toolbar{position:static} #progress{width:100%;margin:0}}
+</style></head>
 <body>
-<header>
-  <h1>Computer Architecture Practice Quiz — Labs + Mid Exam 2025–2026</h1>
-  <p>اختبر نفسك في أسئلة اللابات وميد 2025–2026 — اختار إجابة كل سؤال واضغط Submit للتصحيح</p>
-</header>
-<main class="wrap">
-  <div class="toolbar">
-    <div class="progressbox"><strong>Progress / التقدم</strong><span id="progressText" class="small">0 of 36 answered</span><div class="progressline"><span id="progressBar"></span></div></div>
-    <div class="scorebox"><strong>Questions / الأسئلة:</strong> <span id="total">36</span><br><span class="small">You can change your answers before submitting.</span></div>
-  </div>
-  <div id="quiz"></div>
-  <div class="actions">
-    <button id="submit" onclick="submitQuiz()">Submit &amp; Correct</button>
-    <button id="reset" onclick="resetQuiz()">Try Again / إعادة الاختبار</button>
-  </div>
-  <div id="result" aria-live="polite"></div>
-  <p class="small" style="text-align:center">After submitting, the correct answers and explanations will appear under each question.</p>
+<header><h1>اختبار Assembly — Midterm</h1><p>الامتحانات الثلاثة • اختاري الإجابة ثم اضغطي Submit للتصحيح الفوري</p></header>
+<main>
+<div class="toolbar">
+<label>اختاري الامتحان:
+<select id="filter"><option value="all">كل الامتحانات</option><option>2023–2024</option><option>2024–2025</option><option>2025–2026</option></select></label>
+<button class="soft" id="shuffle">ترتيب عشوائي</button>
+<button class="primary" id="submit">Submit — صححي الإجابات</button>
+<button class="soft" id="reset">إعادة المحاولة</button>
+<span id="progress"></span>
+</div>
+<div id="result"></div>
+<div id="quiz"></div>
+<footer>الأسئلة المكررة بين الامتحانات عليها علامة ⭐ متكرر. الأسئلة ذات الصياغة أو الفكرة المتشابهة تم تمييزها للمراجعة.</footer>
 </main>
 <script>
-const questions = [
-{section:"Lab 0 — Computer Architecture Basics",q:"What is the primary focus of Computer Architecture?",o:["The physical implementation of components.","The high-level design and attributes visible to a programmer.","The building materials used to make a computer.","Specific hardware choices such as memory chip types."],a:1,e:"Computer Architecture focuses on the programmer-visible design, features, and behavior of a computer system."},
-{section:"Lab 0 — Computer Architecture Basics",q:'In the "Building a House" analogy, what represents Computer Organization?',o:["Defining the number and sizes of rooms.","The blueprint and overall plan.","The construction techniques and actual layout of connections.","Deciding only how rooms are connected by hallways."],a:2,e:"Computer Organization describes how the architectural design is implemented through components and their connections."},
-{section:"Lab 0 — Computer Architecture Basics",q:'Which structural component is considered the "brain" of the computer?',o:["Main Memory.","System Bus.","Input/Output (I/O).","CPU (Processor)."],a:3,e:"The CPU executes instructions and controls much of the computer's processing."},
-{section:"Lab 0 — Computer Architecture Basics",q:"What are the four basic functions of a computer?",o:["Typing, printing, scanning, and clicking.","Data processing, data storage, data movement, and control.","CPU, memory, I/O, and system bus.","Input, output, display, and networking."],a:1,e:"The four basic functions are data processing, data storage, data movement, and control."},
-{section:"Lab 0 — True or False",q:"Computer Structure refers to the arrangement and organization of hardware components.",o:["True","False"],a:0,e:"Structure describes how the hardware components are arranged and interconnected."},
-{section:"Lab 0 — True or False",q:'Computer Function is like the "software" or the work the machine does with its structure.',o:["True","False"],a:0,e:"Function describes the operations or work performed by the computer."},
-{section:"Lab 0 — True or False",q:"RAM is an example of long-term data storage.",o:["True","False"],a:1,e:"RAM is volatile temporary working memory; it does not retain data when power is off."},
-{section:"Lab 0 — True or False",q:"The Arithmetic and Logic Unit (ALU) is responsible for performing calculations and comparisons.",o:["True","False"],a:0,e:"The ALU performs arithmetic operations and logical comparisons."},
-{section:"Lab 0 — True or False",q:"The System Bus consists of conducting wires that connect the CPU, memory, and I/O.",o:["True","False"],a:0,e:"The system bus provides communication paths among the CPU, memory, and I/O."},
-{section:"Lab 0 — CPU Components (matching converted to MCQ)",q:"Which CPU component acts as the brain that directs operations and coordinates components?",o:["Registers","ALU","Control Unit","CPU interconnection"],a:2,e:"The Control Unit directs operations and coordinates the other components."},
-{section:"Lab 0 — CPU Components (matching converted to MCQ)",q:"Which CPU component is the workhorse that performs logic and calculations?",o:["Registers","ALU","Control Unit","CPU interconnection"],a:1,e:"The ALU performs arithmetic calculations and logical operations."},
-{section:"Lab 0 — CPU Components (matching converted to MCQ)",q:"Which CPU component is high-speed internal memory for immediate use?",o:["Registers","ALU","Control Unit","CPU interconnection"],a:0,e:"Registers are very fast storage locations inside the CPU for immediate data and instructions."},
-{section:"Lab 0 — CPU Components (matching converted to MCQ)",q:"What provides the internal wiring for communication between CPU parts?",o:["Registers","ALU","Control Unit","CPU interconnection"],a:3,e:"CPU interconnection provides the communication paths among internal CPU components."},
-
-{section:"Lab 1 — System Buses",q:"The Data Bus is a unidirectional pathway.",o:["True","False"],a:1,e:"The Data Bus is generally bidirectional because data can move to and from the CPU."},
-{section:"Lab 1 — System Buses",q:"The width of the data bus determines how much data can be transferred at one time.",o:["True","False"],a:0,e:"A wider data bus can transfer more bits in one transfer."},
-{section:"Lab 1 — System Buses",q:"The Address Bus is used by the CPU to specify a physical address for a memory location.",o:["True","False"],a:0,e:"The address bus carries the address of the memory or I/O location being accessed."},
-{section:"Lab 1 — System Buses",q:"In byte-addressable memory, each individual byte has its own unique address.",o:["True","False"],a:0,e:"Byte-addressable memory assigns a distinct address to each byte."},
-{section:"Lab 1 — System Buses",q:"The Control Bus is responsible for carrying the actual data, such as numbers or text.",o:["True","False"],a:1,e:"The Data Bus carries actual data; the Control Bus carries control and timing signals."},
-{section:"Lab 1 — System Buses",q:"Which bus is typically unidirectional, carrying addresses away from the CPU?",o:["Data Bus","Address Bus","Control Bus","Expansion Bus"],a:1,e:"The Address Bus typically carries addresses from the CPU to memory or I/O."},
-
-{section:"IAS Computer Architecture",q:"Which component in the IAS architecture is responsible for fetching instructions from memory and decoding them?",o:["Main Memory (M)","Central Arithmetic Unit (CA)","Central Control Unit (CC)","Input Equipment (I)"],a:2,e:"The Central Control (CC) unit controls instruction fetching and decoding."},
-{section:"IAS Computer Architecture",q:"The IAS computer belongs to which generation of computers?",o:["First Generation","Second Generation","Third Generation","Fourth Generation"],a:0,e:"The IAS computer was an early vacuum-tube computer, belonging to the first generation."},
-{section:"IAS Computer Architecture",q:'According to the basic design principles of IAS, what does "Input Equipment" do?',o:["Performs logical operations such as AND and OR.","Transfers information from an external recording medium into the computer.","Permanently stores the results of calculations.","Acts as a high-speed internal wiring system."],a:1,e:"Input equipment transfers data and instructions from an external source into the computer."},
-{section:"IAS Computer Architecture",q:"The IAS word is 40 bits long. How is it divided when it contains instructions?",o:["One 40-bit instruction.","Two 20-bit instructions (left and right).","Four 10-bit instructions.","One 8-bit opcode and a 32-bit address."],a:1,e:"A 40-bit IAS word can contain two 20-bit instructions, one in each half."},
-{section:"IAS Computer Architecture",q:"In an IAS instruction, how many bits are allocated to the Opcode and the Address respectively?",o:["12 bits Opcode, 8 bits Address.","10 bits Opcode, 10 bits Address.","8 bits Opcode, 12 bits Address.","20 bits Opcode, 20 bits Address."],a:2,e:"Each 20-bit IAS instruction contains an 8-bit opcode and a 12-bit address."},
-
-{section:"Instruction Pipelining",q:"What is the primary goal of using Pipelining in a processor?",o:["To reduce the number of transistors.","To increase the clock speed of the CPU.","To improve throughput by overlapping the execution of multiple instructions.","To increase the size of the main memory."],a:2,e:"Pipelining overlaps stages of different instructions to improve instruction throughput."},
-{section:"Instruction Pipelining — Stages (matching converted to MCQ)",q:"What happens during the IF (Instruction Fetch) stage?",o:["Execute the operation.","Write the result back to memory/register.","Read the instruction from memory.","Determine what the instruction needs to do."],a:2,e:"IF fetches or reads the next instruction from memory."},
-{section:"Instruction Pipelining — Stages (matching converted to MCQ)",q:"What happens during the ID (Instruction Decode) stage?",o:["Execute the operation.","Write the result back to memory/register.","Read the instruction from memory.","Determine what the instruction needs to do."],a:3,e:"ID decodes the instruction and determines the required operation."},
-{section:"Instruction Pipelining — Stages (matching converted to MCQ)",q:"What happens during the EX (Execute) stage?",o:["Execute the operation.","Write the result back to memory/register.","Read the instruction from memory.","Determine what the instruction needs to do."],a:0,e:"EX performs the operation specified by the instruction."},
-{section:"Instruction Pipelining — Stages (matching converted to MCQ)",q:"What happens during the WR (Write Back) stage?",o:["Execute the operation.","Write the result back to memory/register.","Read the instruction from memory.","Determine what the instruction needs to do."],a:1,e:"WR stores the result in the destination register or memory location."},
-
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:"Parallel processing improves performance by:",o:["Increasing the clock speed of a single core.","Dividing a task into smaller subtasks executed concurrently.","Reducing the total amount of RAM needed.","Converting sequential code into instructions."],a:1,e:"Parallel processing runs independent subtasks at the same time."},
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:"According to Amdahl's Law, what is the primary factor that limits the maximum speedup of a program?",o:["The number of processors available.","The speed of the system bus.","The portion of the program that is inherently sequential.","The size of the cache memory."],a:2,e:"The sequential portion cannot benefit from adding processors and limits the maximum speedup."},
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:"In Speedup = 1 / ((1 − f) + (f / n)), what does (1 − f) represent?",o:["The parallelizable portion of the code.","The number of processors.","The sequential portion of the code.","The total execution time on a single processor."],a:2,e:"If f is the parallelizable fraction, then 1 − f is the sequential fraction."},
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:"If a program is 90% parallelizable (f = 0.9), what is the maximum theoretical speedup with an infinite number of processors?",o:["9 times","10 times","90 times","Infinite speedup"],a:1,e:"With infinitely many processors, speedup approaches 1/(1 − 0.9) = 10."},
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:"What is the primary goal of Parallel Processing?",o:["To increase the storage capacity of the hard drive.","To execute tasks simultaneously on multiple processors to improve performance.","To ensure a program only runs on a single core for stability.","To reduce the amount of electricity a computer uses."],a:1,e:"Parallel processing uses multiple processing units at the same time to improve performance."},
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:"According to Amdahl's Law, if a program is 100% sequential, adding more processors will significantly improve its speed.",o:["True","False"],a:1,e:"A fully sequential program has no parallel portion, so additional processors do not provide parallel speedup."},
-{section:"Lab 5 — Parallel Processing & Amdahl's Law",q:'In Amdahl\'s Law, what does the variable "f" represent?',o:["The number of processors.","The total time taken on a single processor.","The proportion of the program that can be parallelized.","The proportion of the program that is inherently sequential."],a:2,e:"f represents the fraction of execution that can be parallelized; 1 − f is the sequential fraction."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Communication between the components in a microcomputer takes place via the address bus and which other bus?",o:["Common bus","Data bus","Address bus","Control lines"],a:1,e:"The data bus carries the data exchanged among the computer components."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which of the following is NOT considered a peripheral device?",o:["CPU","Keyboard","Monitor","Printer"],a:0,e:"The CPU is the central processing unit, not a peripheral device."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which computer memory is the fastest?",o:["Register","Hard disk","RAM","Cache memory"],a:0,e:"CPU registers are the fastest storage locations in the computer."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"According to the exam choices, which option lists the operations performed by the ALU?",o:["Data manipulation only","Exponential operations only","Square root only","All of the above"],a:3,e:"The exam's intended choice is all of the above: the ALU performs arithmetic and logical data-manipulation operations."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which format is commonly used to represent decimal digits in stored data?",o:["Decimal","Octal","BCD","Hexadecimal"],a:2,e:"BCD (Binary-Coded Decimal) represents each decimal digit using a 4-bit binary code."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which type of computer memory is used to speed up processing?",o:["Cache memory","RAM","ROM","Secondary memory"],a:0,e:"Cache stores frequently needed data and instructions close to the CPU to reduce access time."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"The computer address bus is:",o:["Multidirectional","Bidirectional","Unidirectional","None of the above"],a:2,e:"The address bus typically carries addresses from the CPU to memory or I/O devices."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which circuit is used to store one bit of data?",o:["Flip-flop","Decoder","Encoder","Register"],a:0,e:"A flip-flop is a bistable circuit that stores one bit."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which term describes how the components of a computer are connected and work together?",o:["Computer parts","Computer organization","Computer hardware","None of the above"],a:1,e:"Computer organization describes the operational units and how they are interconnected. The source wording is imprecise, but this is the closest technical choice."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"Which of the following are types or levels of computer architecture mentioned in the choices?",o:["Microarchitecture only","Harvard Architecture only","Von-Neumann Architecture only","All of the mentioned"],a:3,e:"Microarchitecture, Harvard architecture, and Von Neumann architecture are all recognized architecture concepts."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"The address used to identify a location in main memory is known as:",o:["Logical address","Physical address","Cache address","None of the above"],a:1,e:"A physical address identifies an actual location in main memory."},
-{section:"Mid Exam 2025–2026 — Computer Architecture",q:"The fetch and execution cycles are interleaved with the help of the:",o:["Modification in processor architecture","Clock","Special unit","Control unit"],a:1,e:"The clock provides timing signals that coordinate processor operations and cycles."},
-{section:"Mid Exam 2025–2026 — Addressing Modes",q:"Which addressing mode uses the Program Counter (PC) rather than a general-purpose register to calculate the target address?",o:["Indexed with offset","Relative","Direct","Both indexed with offset and direct"],a:1,e:"Relative addressing calculates the effective address using the PC plus an offset."},
-{section:"Mid Exam 2025–2026 — Addressing Modes",q:"In which addressing mode is the operand value specified directly in the instruction?",o:["Immediate","Direct","Definite","Relative"],a:0,e:"Immediate addressing places the actual operand value inside the instruction."},
-{section:"Mid Exam 2025–2026 — Addressing Modes",q:"For the instruction MUL 5(R1,R2), which expression represents the effective address?",o:["5 + R1 + R2","5 + (R1 × R2)","5 + [R1] + [R2]","5 × ([R1] + [R2])"],a:2,e:"The effective address is the displacement plus the contents of the base and index registers."},
-{section:"Mid Exam 2025–2026 — I/O",q:"Which method synchronizes the processor with an I/O device when the device sends a signal that it is ready?",o:["Exceptions","Signal handling","Interrupts","DMA"],a:2,e:"With interrupts, an I/O device signals the processor when it needs attention or is ready."},
-{section:"Mid Exam 2025–2026 — Processor Architectures",q:"Which computer architecture is aimed at reducing instruction execution time through a simpler instruction set?",o:["CISC","RISC","ISA","ANNA"],a:1,e:"RISC uses a reduced and simpler instruction set designed to support efficient execution."},
-{section:"Mid Exam 2025–2026 — Instruction Cycle",q:"What are the two main phases of executing an instruction?",o:["Instruction decoding and storage","Instruction fetch and instruction execution","Instruction execution and storage","Instruction fetch and instruction processing"],a:1,e:"The instruction cycle is commonly described as fetch followed by execute."},
-{section:"Mid Exam 2025–2026 — Bus Structure",q:"What is a main advantage of using a single-bus structure?",o:["Fastest possible data transfers","Cost-effective connectivity and speed","Cost-effective connectivity and ease of attaching peripheral devices","No need for a control bus"],a:2,e:"A single bus is a relatively simple and economical way to connect components and peripherals; it is not necessarily the fastest structure."},
-{section:"Mid Exam 2025–2026 — Micro-operations",q:"An operation executed on data stored in registers is called a:",o:["Micro-operation","Bit operation","Macro-operation","Byte operation"],a:0,e:"A micro-operation is an elementary operation performed on data held in registers."},
-{section:"Mid Exam 2025–2026 — Memory Hierarchy",q:"Which of the following is lowest in the memory hierarchy?",o:["Cache memory","Secondary memory","Registers","RAM"],a:1,e:"Secondary storage is at the lower levels of the memory hierarchy and has greater capacity but slower access."},
-{section:"Mid Exam 2025–2026 — Instructions",q:"A group of bits that tells the computer to perform a specific operation is known as:",o:["Instruction code","Micro-operation","Accumulator","Register"],a:0,e:"An instruction code contains the operation information (opcode) that specifies what the computer should do."},
-{section:"Mid Exam 2025–2026 — Registers",q:"In the exam's wording, the load instruction transfers data from memory to a processor register known as the:",o:["Accumulator","Instruction Register","Program Counter","Memory Address Register"],a:0,e:"The intended answer in this question is the accumulator, a processor register that can receive data from memory."},
-{section:"Mid Exam 2025–2026 — Pipelining",q:"An instruction pipeline can be implemented by means of a:",o:["LIFO buffer","FIFO buffer","Stack","Circular queue only"],a:1,e:"A FIFO buffer preserves the order of instructions as they pass through pipeline stages."},
-{section:"Mid Exam 2025–2026 — Control Unit",q:"What does a micro-operation sequencer do?",o:["Generates the address of the next microinstruction to be executed.","Generates all control signals directly for every instruction.","Sequentially averages all microinstructions in control memory.","Stores the results of arithmetic operations."],a:0,e:"The sequencer determines the address of the next microinstruction in control memory."},
-{section:"Mid Exam 2025–2026 — Micro-operations",q:"The operation executed on data stored in registers is called a:",o:["Macro-operation","Micro-operation","Bit-operation","Byte-operation"],a:1,e:"A micro-operation performs a basic operation on register data."},
-{section:"Mid Exam 2025–2026 — Status Register",q:"A status bit is also called a:",o:["Binary bit","Flag bit","Signed bit","Unsigned bit"],a:1,e:"Status bits are commonly called flags because they indicate conditions such as zero, carry, or overflow."},
-{section:"Mid Exam 2025–2026 — Memory Addressing",q:"An address in main memory is called a:",o:["Physical address","Logical address","Memory address register","Word register"],a:0,e:"The exam identifies a main-memory location by its physical address."},
-{section:"Mid Exam 2025–2026 — Instruction Types",q:"Instructions that copy information from one location to another within processor registers or between a register and main memory are called:",o:["Data transfer instructions","Program control instructions","Input-output instructions","Logical instructions"],a:0,e:"Data transfer instructions move information between registers and memory locations."},
-{section:"Mid Exam 2025–2026 — Addressing Modes",q:"Adding the Program Counter content to the address part of an instruction to obtain the effective address is called:",o:["Relative addressing mode","Index addressing mode","Register mode","Implied mode"],a:0,e:"Relative addressing uses the PC as the base and adds an offset from the instruction."},
-{section:"Mid Exam 2025–2026 — Stack",q:"What does the Stack Pointer (SP) contain?",o:["Address of the current instruction","Address of the next instruction","Address of the top element of the stack","Size of the stack"],a:2,e:"The Stack Pointer holds the address of the current top of the stack."},
-{section:"Mid Exam 2025–2026 — Assembly Language",q:"Which of the following are NOT assembly instructions?",o:["MOV","INT","MUL","None of these"],a:3,e:"MOV, INT, and MUL are all valid assembly-language instructions or mnemonics."},
-{section:"Mid Exam 2025–2026 — Assembly Language",q:"Which option gives the operand counts commonly used by assembly instructions, excluding zero-operand instructions?",o:["Zero only","One only","Two only","Both one and two"],a:3,e:"Assembly instructions commonly use one or two explicit operands. Note: some valid instructions can also have zero operands, so the original exam wording is ambiguous."},
-{section:"Mid Exam 2025–2026 — Address Capacity",q:"A processor has a 32-bit address bus. What is its maximum byte-addressable address space?",o:["64 KB","4 GB","Both 64 KB and 4 GB","None of these"],a:1,e:"A 32-bit address bus can identify 2³² byte addresses, which is 4 GiB (commonly stated as 4 GB). The 16-bit data bus does not change the address-space size."},
-{section:"Mid Exam 2025–2026 — Memory",q:"Which memory unit communicates directly with the CPU?",o:["Main memory","Secondary memory","Shared memory","Auxiliary memory"],a:0,e:"Main memory is the primary memory directly accessed by the CPU for instructions and data."},
-{section:"Mid Exam 2025–2026 — Addressing Modes",q:"In which addressing mode is the operand value given explicitly in the instruction?",o:["Absolute","Immediate","Indirect","Direct"],a:1,e:"Immediate addressing includes the operand value itself in the instruction."},
-{section:"Mid Exam 2025–2026 — Logic Circuits",q:"Which combinational logic circuit sends data from one source to one of two or more separate destinations?",o:["Decoder","Encoder","Multiplexer","Demultiplexer"],a:3,e:"A demultiplexer routes one input signal to one selected output among several destinations."},
-{section:"Mid Exam 2025–2026 — Registers (Repeated Exam Question)",q:"According to the exam's wording, the load instruction transfers data from memory to a processor register known as the:",o:["Accumulator","Instruction Register","Program Counter","Memory Address Register"],a:0,e:"The intended answer is the accumulator, which is a CPU register that can receive data."},
-{section:"Mid Exam 2025–2026 — Memory Performance",q:"The average time required to reach a storage location in memory and obtain its contents is called:",o:["Latency time","Access time","Turnaround time","Response time"],a:1,e:"Access time is the time needed to locate and retrieve data from a memory location."},
-{section:"Mid Exam 2025–2026 — Computer History",q:"Who developed the basic architecture of the computer commonly associated with the stored-program concept?",o:["Blaise Pascal","Charles Babbage","John von Neumann","None of the above"],a:2,e:"John von Neumann is associated with the foundational stored-program computer architecture."}
+const allQuestions=[{"exam": "2023–2024", "num": 1, "q": "Perform 07FB3 + 1B621 (hexadecimal).", "opts": ["235B4", "235C4", "235D4", "235A4"], "ans": "235D4", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 2, "q": "Perform 1ADB − 1A70 (hexadecimal).", "opts": ["006B", "006C", "235D4", "235A4"], "ans": "006B", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 3, "q": "Add 01101 + 10001 (binary).", "opts": ["00011", "11110", "11000", "11111"], "ans": "11110", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 4, "q": "Subtract 00111 from 11000 (binary).", "opts": ["11000", "11001", "10001", "00011"], "ans": "10001", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 5, "q": "Find the 2’s complement of 0110011.", "opts": ["1001101", "1100111", "1001001", "1100011"], "ans": "1001101", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 6, "q": "Assembly language is often termed as:", "opts": ["Low-level language", "Middle-level language", "High-level language", "None of the above"], "ans": "Low-level language", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 7, "q": "Assembly instructions such as ADD and MOV are accompanied by statements called:", "opts": ["Functions", "Files", "Programs", "Directives"], "ans": "Directives", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 8, "q": "An instruction tells the CPU what to do.", "opts": ["True", "False"], "ans": "True", "repeat": true, "note": ""}, {"exam": "2023–2024", "num": 9, "q": "The mnemonics and operands fields together perform the real work of the program.", "opts": ["True", "False"], "ans": "True", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 10, "q": "Convert (125)₁₀ to octal.", "opts": ["(157)₈", "(175)₈", "(147)₈", "(167)₈"], "ans": "(175)₈", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 11, "q": "What is the address space of the x86 processor, as given in the exam?", "opts": ["2¹⁶", "2²⁰", "2²⁴", "2⁸"], "ans": "2²⁰", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 12, "q": "IP stands for:", "opts": ["Instruction Point", "Instruction Pointer", "Instruction Program", "None of these"], "ans": "Instruction Pointer", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 13, "q": "Decode ADD AX, 15h.", "opts": ["AX ← AX + 15", "AX ← AX + F", "AX ← 15 + AX", "None of these"], "ans": "AX ← AX + 15", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 14, "q": "Which translates assembly-language programs into machine instructions?", "opts": ["Debugger", "Interpreter", "Assembler", "Compiler"], "ans": "Assembler", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 15, "q": "Instructions such as MOV or ADD are called:", "opts": ["OP-Code", "Operators", "Commands", "None of these"], "ans": "OP-Code", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 16, "q": "The purpose of the microprocessor is to control:", "opts": ["Memory", "Switches", "Processing", "Tasks"], "ans": "Processing", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 17, "q": "SS stands for:", "opts": ["Single stack", "Stack segment", "Sequence stack", "Random stack"], "ans": "Stack segment", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 18, "q": "OF stands for:", "opts": ["Overflow flag", "Overdue flag", "One flag", "Overhead flag"], "ans": "Overflow flag", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 19, "q": "The data size of a word is:", "opts": ["8 bytes", "4 bytes", "2 bytes", "16 bytes"], "ans": "2 bytes", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 20, "q": "The ALU uses ______ to store intermediate results.", "opts": ["Accumulators", "Registers", "Stack", "None"], "ans": "Accumulators", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 21, "q": "The IP register is ______ bits in length.", "opts": ["8 bits", "4 bits", "16 bits", "32 bits"], "ans": "16 bits", "repeat": true, "note": ""}, {"exam": "2023–2024", "num": 22, "q": "INC destination increments the destination by:", "opts": ["1", "2", "30", "41"], "ans": "1", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 23, "q": "The microprocessor is the ______ of the computer and performs computational tasks.", "opts": ["Main", "Heart", "Important", "Simple"], "ans": "Heart", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 24, "q": "CF is known as:", "opts": ["Carry flag", "Condition flag", "Common flag", "Single flag"], "ans": "Carry flag", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 25, "q": "AX is formed by grouping:", "opts": ["AH and AL", "BH and BL", "CH and CL", "DH and DL"], "ans": "AH and AL", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 26, "q": "Which are components of a computer?", "opts": ["System bus", "CPU", "Memory unit", "All of these"], "ans": "All of these", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 27, "q": "Which are components of a microprocessor?", "opts": ["Register unit", "Arithmetic and logical unit", "Timing and control unit", "All of these"], "ans": "All of these", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 28, "q": "Which microprocessor was launched by Intel?", "opts": ["Z-80", "8080", "M-6800", "None of these"], "ans": "8080", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 29, "q": "A small amount of high-speed memory used directly with the microprocessor is:", "opts": ["Cache", "HDD", "ROM", "RAM"], "ans": "Cache", "repeat": false, "note": ""}, {"exam": "2023–2024", "num": 30, "q": "Which microprocessor producers continued successfully creating newer versions?", "opts": ["Intel", "Motorola", "Both A and B", "None of these"], "ans": "Both A and B", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 1, "q": "The Bus Interface Unit (BIU) executes instructions previously fetched.", "opts": ["True", "False"], "ans": "False", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 2, "q": "Registers are used to store information permanently.", "opts": ["True", "False"], "ans": "False", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 3, "q": "SR stands for:", "opts": ["Segment registers", "Stack registers", "Static registers", "None of these"], "ans": "Segment registers", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 4, "q": "Which transfers program control to a different point in the instruction stream without recording return information?", "opts": ["INT", "JMP", "BNQ", "CMP"], "ans": "JMP", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 5, "q": "ES stands for:", "opts": ["Extra segment", "Extra Stack", "Extended Stack", "None of these"], "ans": "Extra segment", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 6, "q": "FR stands for:", "opts": ["Flag register", "Finer register", "Fair register", "None of these"], "ans": "Flag register", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 7, "q": "Accumulator is usually used to store the return value of a procedure.", "opts": ["True", "False"], "ans": "True", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 8, "q": "An instruction tells the CPU what to do.", "opts": ["True", "False"], "ans": "True", "repeat": true, "note": ""}, {"exam": "2024–2025", "num": 9, "q": "A flag is set if an arithmetic operation generates a carry or borrow out of the most-significant bit; otherwise it is cleared. Which flag?", "opts": ["Carry Flag", "Parity Flag", "Zero Flag", "Sign Flag"], "ans": "Carry Flag", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 10, "q": "A flag is set if an arithmetic operation generates a carry or borrow out of bit 3; otherwise it is cleared. Which flag?", "opts": ["Adjust Flag", "Parity Flag", "Zero Flag", "Sign Flag"], "ans": "Adjust Flag", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 11, "q": "The flag set equal to the most-significant bit of the result (the sign bit) is:", "opts": ["Carry Flag", "Parity Flag", "Zero Flag", "Sign Flag"], "ans": "Sign Flag", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 12, "q": "Which contains the offset within the code segment of the next instruction to be executed?", "opts": ["EIP", "EBP", "ESP", "EAX"], "ans": "EIP", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 13, "q": "After MOV AX,7000h; ADD AX,5000h; SUB AX,2000h, what is AL?", "opts": ["25h", "12h", "00h", "None of these"], "ans": "None of these", "repeat": false, "note": "The low byte is 00h."}, {"exam": "2024–2025", "num": 14, "q": "For the same code, what is AH?", "opts": ["0000", "1000", "1500", "None of these"], "ans": "None of these", "repeat": false, "note": "AX becomes A000h, so AH is A0h."}, {"exam": "2024–2025", "num": 15, "q": "Given val1=40000h, val2=60000h, val3=30000h; EAX is loaded with val1 and val2 and val3 are added. What is the low byte AL of the final result?", "opts": ["3000", "2000", "0000", "1000"], "ans": "0000", "repeat": false, "note": "40000h + 60000h + 30000h = 130000h; AL is D0h, so none of the listed values is exact. This source question's options do not contain the computed value."}, {"exam": "2024–2025", "num": 16, "q": "For the same data/code, which is the value of EAH (AH)?", "opts": ["0003", "000E", "0000", "000D"], "ans": "None of these", "repeat": false, "note": "The sum is D0000h, so the AH register contains 00h."}, {"exam": "2024–2025", "num": 17, "q": "The set of all instructions makes up the computer’s:", "opts": ["Commands", "Instructions", "Instruction Set", "None of these"], "ans": "Instruction Set", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 18, "q": "Which field stands for operation code and specifies the operation to be performed?", "opts": ["Op-Code", "Instructions", "Operands", "None of these"], "ans": "Op-Code", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 19, "q": "In Assembly Language, the first character of a label must be alphabetic, not a number.", "opts": ["True", "False"], "ans": "True", "repeat": false, "note": ""}, {"exam": "2024–2025", "num": 20, "q": "Which allows you to trace the execution of a program?", "opts": ["Loader", "Assembler", "Linker", "Debugger"], "ans": "Debugger", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 1, "q": "What is the decimal equivalent of binary (111101)₂?", "opts": ["61", "63", "62", "73"], "ans": "61", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 2, "q": "Convert decimal 125 to hexadecimal.", "opts": ["(01100101)₁₆", "(01101101)₁₆", "(01111101)₁₆", "(11101101)₁₆"], "ans": "(01111101)₁₆", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 3, "q": "What is the decimal value of hexadecimal 1DF?", "opts": ["479", "379", "579", "567"], "ans": "479", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 4, "q": "Find the 2’s complement of 11010011.", "opts": ["01101001", "00101101", "00100100", "10010101"], "ans": "00101101", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 5, "q": "Convert octal 345 to binary.", "opts": ["11000011", "111100101", "11101101", "10111100"], "ans": "11100101", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 6, "q": "Convert (F5)₁₆ to decimal.", "opts": ["244", "254", "145", "245"], "ans": "245", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 7, "q": "Convert binary (0010110101)₂ to hexadecimal.", "opts": ["(0C5)₁₆", "(0A5)₁₆", "(0B5)₁₆", "(0E5)₁₆"], "ans": "(0B5)₁₆", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 8, "q": "Find the 1’s complement of 100111.", "opts": ["011000", "1001110", "0110110", "1000101"], "ans": "011000", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 9, "q": "Subtract 10011 from 11001 (binary).", "opts": ["11101", "11011", "00110", "10011"], "ans": "00110", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 10, "q": "Perform ABCDF + 9FDCA (hexadecimal).", "opts": ["A9DA9", "B9DA9", "B9E9A", "C9DA9"], "ans": "B9DA9", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 11, "q": "Which register stores the instruction currently being executed?", "opts": ["Instruction register", "Counter register", "Both A and B", "None of these"], "ans": "Instruction register", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 12, "q": "An assembly instruction can be represented in the form of:", "opts": ["Octal digit", "Decimal", "Hexadecimal", "None of these"], "ans": "Hexadecimal", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 13, "q": "Which group of registers can contain input data, memory addresses, and result data?", "opts": ["Input data only", "Memory addresses only", "Result data only", "All of these"], "ans": "All of these", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 14, "q": "AH stands for:", "opts": ["Accumulator high", "Address high", "Appropriate high", "Application high"], "ans": "Accumulator high", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 15, "q": "BP stands for:", "opts": ["Bit pointer", "Base pointer", "Bus pointer", "Byte pointer"], "ans": "Base pointer", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 16, "q": "A register is usually the ______ level of memory access by the microprocessor.", "opts": ["First level", "Second level", "Third level", "Fourth level"], "ans": "First level", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 17, "q": "Causing a flag to become 0 is called:", "opts": ["Set a flag", "Clearing a flag", "Both A and B", "None of these"], "ans": "Clearing a flag", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 18, "q": "CS stands for:", "opts": ["Code segment", "Coot segment", "Cost segment", "Counter segment"], "ans": "Code segment", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 19, "q": "DI stands for:", "opts": ["Delete index", "Defect index", "Definition index", "Destination index"], "ans": "Destination index", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 20, "q": "DS stands for:", "opts": ["Data segment", "Direct segment", "Declare segment", "Divide segment"], "ans": "Data segment", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 21, "q": "Eight of the registers in x86 are known as:", "opts": ["General-purpose registers", "Pointer or index registers", "Segment registers", "Other registers"], "ans": "General-purpose registers", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 22, "q": "Perform ABEDA − 5FDEF (hexadecimal).", "opts": ["4F0FE", "4F0FF", "4F1FE", "5F0FE"], "ans": "4F0FE", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 23, "q": "A chip has a capacity of 1 MB and is organized as 64K words of 4 bits. What is the size of the address bus?", "opts": ["8 bit", "32 bit", "20 bit", "16 bit"], "ans": "16 bit", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 24, "q": "In Assembly language programming, the minimum number of operands required for an instruction is:", "opts": ["One", "Two", "Three", "Zero"], "ans": "Zero", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 25, "q": "How can we make computers work faster?", "opts": ["Fetch-execute cycle and pipelining", "Using assembly language", "Both A and B", "None of these"], "ans": "Both A and B", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 26, "q": "How many parts are in a general instruction format?", "opts": ["1", "2", "3", "4"], "ans": "2", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 27, "q": "Perform hexadecimal addition 8FAB + B7E8.", "opts": ["14793", "14783", "14693", "14893"], "ans": "14793", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 28, "q": "In which register is an instruction decoded, prepared, and ultimately executed?", "opts": ["Instruction register", "Current register", "Both A and B", "None of these"], "ans": "Instruction register", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 29, "q": "INT instruction stands for:", "opts": ["Input", "Interrupt", "Both A and B", "None of these"], "ans": "Interrupt", "repeat": false, "note": ""}, {"exam": "2025–2026", "num": 30, "q": "IR stands for:", "opts": ["Intel register", "In counter register", "Index register", "Instruction register"], "ans": "Instruction register", "repeat": false, "note": ""}];
+const repeatedTexts=[
+"An instruction tells the CPU what to do.",
+"The IP register is",
 ];
-
-const quiz = document.getElementById("quiz");
-let submitted = false;
-document.getElementById("total").textContent = questions.length;
-let currentSection = "";
-questions.forEach((q,i)=>{
-  if(q.section!==currentSection){currentSection=q.section;const h=document.createElement("h2");h.className="section";h.textContent=currentSection;quiz.appendChild(h);}
-  const card=document.createElement("section");card.className="question";card.id="q"+i;
-  const top=document.createElement("div");top.className="qtop";
-  const num=document.createElement("span");num.className="num";num.textContent=i+1;
-  const title=document.createElement("div");title.className="qtext";title.textContent=q.q;
-  top.append(num,title);card.appendChild(top);
-  const tag=document.createElement("div");tag.className="tag";tag.textContent=q.o.length===2?"Choose True or False":"Choose one answer";card.appendChild(tag);
-  const opts=document.createElement("div");opts.className="options";
-  q.o.forEach((op,j)=>{
-    const label=document.createElement("label");label.className="option";label.dataset.index=j;
-    const input=document.createElement("input");input.type="radio";input.name="q"+i;input.value=j;
-    input.addEventListener("change",()=>{if(!submitted){opts.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));label.classList.add("selected");updateProgress();}});
-    const text=document.createElement("span");text.textContent=op;
-    label.append(input,text);opts.appendChild(label);
-  });
-  card.appendChild(opts);
-  const fb=document.createElement("div");fb.className="feedback";fb.id="fb"+i;card.appendChild(fb);
-  quiz.appendChild(card);
-});
-function updateProgress(){
- const n=questions.filter((q,i)=>document.querySelector('input[name="q'+i+'"]:checked')).length;
- document.getElementById("progressText").textContent=n+" of "+questions.length+" answered";
- document.getElementById("progressBar").style.width=(n/questions.length*100)+"%";
+function isRepeated(q){
+ if(q.repeat) return true;
+ const s=q.q.toLowerCase();
+ return s.includes("instruction tells the cpu") || s.includes("ip register is");
 }
-function submitQuiz(){
+let current=[...allQuestions], submitted=false;
+const quiz=document.getElementById('quiz');
+function render(){
+ submitted=false; document.getElementById('result').style.display='none';
+ quiz.innerHTML='';
+ current.forEach((item,index)=>{
+  const card=document.createElement('section');card.className='question';card.dataset.index=index;
+  const meta=document.createElement('div');meta.className='meta';
+  meta.innerHTML=`<span class="badge">${item.exam}</span><span>السؤال ${item.num}</span>${isRepeated(item)?'<span class="badge repeat">⭐ متكرر — اعملي عليه علامة</span>':''}`;
+  const q=document.createElement('div');q.className='qtext';q.textContent=item.q;
+  card.append(meta,q);
+  item.opts.forEach((opt,j)=>{
+   const lab=document.createElement('label');lab.className='option';
+   const inp=document.createElement('input');inp.type='radio';inp.name='q'+index;inp.value=opt;
+   const span=document.createElement('span');span.textContent=String.fromCharCode(65+j)+'. '+opt;
+   lab.append(inp,span);card.append(lab);
+  });
+  const fb=document.createElement('div');fb.className='feedback';fb.id='fb'+index;card.append(fb);
+  if(item.note){const n=document.createElement('div');n.className='note';n.textContent='ملاحظة: '+item.note;card.append(n);}
+  quiz.append(card);
+ });
+ updateProgress();
+}
+function updateProgress(){
+ const done=current.filter((_,i)=>document.querySelector('input[name="q'+i+'"]:checked')).length;
+ document.getElementById('progress').textContent=`تمت الإجابة على ${done} من ${current.length}`;
+}
+quiz.addEventListener('change',updateProgress);
+document.getElementById('submit').onclick=()=>{
  if(submitted)return;
- const unanswered=questions.map((q,i)=>i).filter(i=>!document.querySelector('input[name="q'+i+'"]:checked'));
- if(unanswered.length){
-   if(!confirm("You have "+unanswered.length+" unanswered question(s). Submit anyway?")){document.getElementById("q"+unanswered[0]).scrollIntoView({behavior:"smooth",block:"center"});return;}
- }
- let score=0;
- questions.forEach((q,i)=>{
-   const chosen=document.querySelector('input[name="q'+i+'"]:checked');
-   const card=document.getElementById("q"+i);
-   const labels=card.querySelectorAll(".option");
-   labels.forEach((label,j)=>{
-     label.querySelector("input").disabled=true;
-     if(j===q.a)label.classList.add("correct");
-     if(chosen && Number(chosen.value)===j && j!==q.a)label.classList.add("wrong");
-   });
-   const fb=document.getElementById("fb"+i);
-   const isCorrect=chosen && Number(chosen.value)===q.a;
-   if(isCorrect)score++;
-   fb.className="feedback show "+(isCorrect?"good":"bad");
-   fb.textContent=(isCorrect?"✓ Correct. ":"✗ Incorrect. ")+(chosen?"Your answer: "+q.o[Number(chosen.value)]+". ":"No answer selected. ")+"Correct answer: "+q.o[q.a]+". "+q.e;
+ let score=0,answered=0;
+ current.forEach((item,i)=>{
+  const chosen=document.querySelector('input[name="q'+i+'"]:checked');
+  const card=document.querySelector(`[data-index="${i}"]`);
+  const fb=document.getElementById('fb'+i);
+  if(chosen)answered++;
+  const correct=chosen && chosen.value===item.ans;
+  if(correct)score++;
+  card.querySelectorAll('.option').forEach((lab,j)=>{
+   const val=item.opts[j];
+   if(val===item.ans)lab.classList.add('correct');
+   if(chosen && val===chosen.value && !correct)lab.classList.add('wrong');
+   lab.querySelector('input').disabled=true;
+  });
+  fb.className='feedback '+(correct?'good':'bad');
+  fb.textContent=(correct?'✓ إجابة صحيحة':'✗ الإجابة الصحيحة: '+item.ans)+(chosen?'':' — لم تختاري إجابة');
  });
  submitted=true;
- const result=document.getElementById("result");
- const percent=Math.round(score/questions.length*100);
- let message=percent>=85?"Excellent work!":percent>=70?"Good job!":percent>=50?"Keep practicing!":"Review the explanations and try again.";
- result.style.display="block";
- result.innerHTML="<h2>Your Result / نتيجتك</h2><div class='big'>"+score+" / "+questions.length+"</div><strong>"+percent+"%</strong><p>"+message+"</p><p class='small'>Green = correct answer · Red = your incorrect answer</p>";
- document.getElementById("submit").disabled=true;
- document.getElementById("submit").textContent="Submitted";
- result.scrollIntoView({behavior:"smooth",block:"center"});
-}
-function resetQuiz(){location.reload();}
-updateProgress();
-</script>
-</body>
-</html>
+ const box=document.getElementById('result');box.style.display='block';
+ const pct=Math.round(score/current.length*100);
+ box.innerHTML=`<div>نتيجتك</div><div class="score">${score} / ${current.length}</div><div>${pct}% — أجبتِ عن ${answered} سؤالًا</div><p>${pct>=85?'ممتاز جدًا!':pct>=65?'شغل كويس، راجعي الأخطاء.':'راجعي الإجابات الخاطئة وحاولي مرة أخرى.'}</p>`;
+ box.scrollIntoView({behavior:'smooth',block:'center'});
+};
+document.getElementById('reset').onclick=render;
+document.getElementById('filter').onchange=(e)=>{
+ const f=e.target.value;current=allQuestions.filter(x=>f==='all'||x.exam===f);render();
+};
+document.getElementById('shuffle').onclick=()=>{
+ for(let i=current.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[current[i],current[j]]=[current[j],current[i]];}
+ render();
+};
+render();
+</script></body></html>
